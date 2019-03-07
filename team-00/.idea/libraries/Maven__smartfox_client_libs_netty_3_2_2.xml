@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: smartfox.client-libs:netty:3.2.2">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/smartfox/client-libs/netty/3.2.2/netty-3.2.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/smartfox/client-libs/netty/3.2.2/netty-3.2.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/smartfox/client-libs/netty/3.2.2/netty-3.2.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

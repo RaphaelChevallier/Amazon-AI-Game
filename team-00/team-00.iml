@@ -5,12 +5,10 @@
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2" level="project" />
     <orderEntry type="library" name="Maven: ubc-yong-gao:smartfox-client:1.0" level="project" />
     <orderEntry type="library" name="Maven: ubc-yong-gao:ygraph:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.gephi:graph-api:0.9.1" level="project" />

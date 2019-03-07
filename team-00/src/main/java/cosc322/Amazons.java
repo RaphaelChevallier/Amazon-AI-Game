@@ -1,4 +1,100 @@
- * handle a move made by this player --- send the info to the server.
+package cosc322;
+
+import ygraphs.ai.smart_fox.GameMessage;
+import ygraphs.ai.smart_fox.games.AmazonsGameMessage;
+import ygraphs.ai.smart_fox.games.GameClient;
+import ygraphs.ai.smart_fox.games.GameModel;
+import ygraphs.ai.smart_fox.games.GamePlayer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TimerTask;
+
+/**
+ * For testing and demo purposes only. An GUI Amazon client for human players
+ * @author yong.gao@ubc.ca
+ */
+public class Amazons extends GamePlayer{
+
+	private GameClient gameClient;
+	private JFrame guiFrame = null;
+	private GameBoard board = null;
+	private boolean gameStarted = false;
+	public String usrName = null;
+
+	/**
+	 * Constructor
+	 * @param name
+	 * @param passwd
+	 */
+	public Amazons(String name, String passwd){
+
+		this.usrName = name;
+		setupGUI();
+
+		connectToServer(name, passwd);
+	}
+
+	private void connectToServer(String name, String passwd){
+		// create a GameClient and use "this" class (a GamePlayer) as the delegate.
+		// the client will take care of the communication with the server.
+		gameClient = new GameClient(name, passwd, this);
+	}
+
+	@Override
+	/**
+	 * Implements the abstract method defined in GamePlayer. Will be invoked by the GameClient
+	 * when the server says the login is successful
+	 */
+	public void onLogin() {
+
+		//once logged in, the gameClient will have  the names of available game rooms
+		ArrayList<String> rooms = gameClient.getRoomList();
+		this.gameClient.joinRoom(rooms.get(0));
+	}
+
+
+	/**
+	 * Implements the abstract method defined in GamePlayer. Once the user joins a room,
+	 * all the game-related messages will be forwarded to this method by the GameClient.
+	 *
+	 * See GameMessage.java
+	 *
+	 * @param messageType - the type of the message
+	 * @param msgDetails - A HashMap info and data about a game action
+	 */
+	public boolean handleGameMessage(String messageType, Map<String, Object> msgDetails){
+
+		if(messageType.equals(GameMessage.GAME_ACTION_START)){
+			if(((String) msgDetails.get("player-black")).equals(this.userName())){
+				System.out.println("Game State: " +  msgDetails.get("player-black"));
+			}
+		}
+		else if(messageType.equals(GameMessage.GAME_ACTION_MOVE)){
+			handleOpponentMove(msgDetails);
+		}
+
+		return true;
+	}
+
+	//handle the event that the opponent makes a move.
+	private void handleOpponentMove(Map<String, Object> msgDetails){
+		System.out.println("OpponentMove(): " + msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR));
+		ArrayList<Integer> qcurr = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);
+		ArrayList<Integer> qnew = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.Queen_POS_NEXT);
+		ArrayList<Integer> arrow = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.ARROW_POS);
+		System.out.println("QCurr: " + qcurr);
+		System.out.println("QNew: " + qnew);
+		System.out.println("Arrow: " + arrow);
+
+		board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1),
+				qcurr.get(0), qcurr.get(1), true);
+	}
+/* handle a move made by this player --- send the info to the server.
      * @param x queen row index 
      * @param y queen col index
      * @param arow arrow row index
@@ -6,7 +102,8 @@
      * @param qfr queen original row
      * @param qfc queen original col
      */
-    public void playerMove(int x, int y, int arow, int acol, int qfr, int qfc){		
+
+ public void playerMove(int x, int y, int arow, int acol, int qfr, int qfc){
 		 
 	int[] qf = new int[2];
 	qf[0] = qfr;
@@ -69,7 +166,7 @@
      * @author yongg
      *
      */
-    public class GameBoard extends JPanel{
+    public class GameBoard extends JPanel {
 
 	    private static final long serialVersionUID = 1L;
 	    private  int rows = 10;
@@ -191,7 +288,7 @@
 	     * 
 	     * @author yongg
 	     */
-	    public class GameEventHandler extends MouseAdapter{
+	    public class GameEventHandler extends MouseAdapter {
 
 			int counter = 0;
 
