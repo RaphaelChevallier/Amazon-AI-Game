@@ -35,8 +35,9 @@ public class Amazons extends GamePlayer{
 
 		this.usrName = name;
 		setupGUI();
-
+                
 		connectToServer(name, passwd);
+                System.out.println(name + " connected");
 	}
 
 	private void connectToServer(String name, String passwd){
@@ -116,7 +117,9 @@ public class Amazons extends GamePlayer{
 	int[] ar = new int[2];
 	ar[0] = arow;
 	ar[1] = acol;
-
+        java.util.Timer timer = new java.util.Timer();
+        MyTimer newTimer = new MyTimer(gameClient, qf, qn, ar);
+        timer.schedule(newTimer, 10000);
 	//To send a move message, call this method with the required data  
 	//this.gameClient.sendMoveMessage(qf, qn, ar);
 	
@@ -451,8 +454,9 @@ public class Amazons extends GamePlayer{
      * @param args
      */
     public static void main(String[] args) { 
+        Amazons game02 = new Amazons("player-02", "02");
 	Amazons game01 = new Amazons("player-01", "01");
-	Amazons game02 = new Amazons("player-02", "02");
+	
 	//Amazons game = new Amazons(args[0], args[1]);		
     }
 }//end of Amazon
