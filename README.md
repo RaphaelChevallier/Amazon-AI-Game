@@ -7,7 +7,7 @@ opening book(starter algorithm for possible moves)
 2. Minimax algorithm(find heuristic)
 3. Alpha-Beta Pruning
 4. static board scores
-5. Territory Evaluation\\\
+5. Territory Evaluation\
 Additional subjects we must observe:
 
 
