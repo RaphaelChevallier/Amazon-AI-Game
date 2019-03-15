@@ -6,6 +6,6 @@ opening book(starter algorithm for possible moves)
 1. Build Tree
 2. Minimax algorithm(find heuristic)
 3. Alpha-Beta Pruning
-4. static board scores
-5. Territory Evaluation
+  3.5. static board scores
+4. Territory Evaluation
 
