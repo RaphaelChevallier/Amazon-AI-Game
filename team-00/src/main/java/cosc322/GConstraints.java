@@ -77,6 +77,76 @@ public class GConstraint {
         }
     }
 
-    //Implement getmoves here
-    //test git push
+     protected void addArrow(Arrow arrownew) {
+        arrows.add(arrownew);
+        updatemove();
+    } 
+
+    private void resetboard() {
+        for(int i = 0; i <= 9; i++) {
+            for(int j = 0; j <= 9; j++) {
+                gameboard[i][j] = null;
+            }
+        }
+    } 
+
+  //update after each move
+    protected void updatemove() {
+        resetboard();
+
+        for(Queen q: ally) {
+        	if(ally != null){
+        		gameboard[q.row][q.col] = q;
+        	}
+        }
+
+        for(Queen q: opponent) {
+        	if(opponent != null) {
+                gameboard[q.row][q.col] = q;
+        	}
+        }
+
+        for(Arrow arrow: arrows) {
+            if(arrow != null) {
+                gameboard[arrow.row][arrow.col] = arrow;
+            } } }
+
+
+    //decides winner and loser
+    protected boolean finalresult() {
+        if (opposition == false || Qmove.size() == 0) {
+            if (opposition == false) {
+                System.out.println("Opponent Lost");
+            } else {
+                System.out.println("Opponent Won");
+            }
+            return true;
+        }
+        else {
+            return false;
+        } }
+     
+
+
+    public void outputboard() {
+        String layout = "";
+        String ln = "\nx--- --- --- --- --- --- --- --- --- ---x";
+        for (int i = 0; i < 10; i++) {
+            layout += ln + "\n";
+            for (int j = 0; j < 10; j++) {
+                layout += "| ";
+                if (gameboard[i][j] == null) layout += "  ";
+                else if (gameboard[i][j] instanceof Queen) {
+                    if (gameboard[i][j] == enemyfind()[0] || gameboard[i][j] == enemyfind()[1] ||
+                            gameboard[i][j] == enemyfind()[2] || gameboard[i][j] == enemyfind()[3]) {
+                        layout += "B ";
+                    } else layout += "W ";
+                } else layout += "a ";
+            }
+            layout += "|";
+        }
+        layout += ln;
+        System.out.println(layout);
+    } 
 }
+
