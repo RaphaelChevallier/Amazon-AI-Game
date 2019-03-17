@@ -14,7 +14,7 @@ public class COSC322Test extends GamePlayer{
 
     private GameClient gameClient;
 	
-    private String userName = null;
+    private String userName = "Raphael Chevallier";
  
 	
     /**
@@ -22,7 +22,7 @@ public class COSC322Test extends GamePlayer{
      * @param args for name and passwd (current, any string would work)
      */
     public static void main(String[] args) {				 
-	COSC322Test player_01 = new COSC322Test("raph", "maybenot");
+	COSC322Test player_01 = new COSC322Test("Raphael Chevallier", "maybenot");
     }
 	
     /**
