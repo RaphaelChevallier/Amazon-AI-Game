@@ -35,7 +35,7 @@ public class Amazons extends GamePlayer{
 
 		this.usrName = name;
 		setupGUI();
-                
+
 		connectToServer(name, passwd);
                 System.out.println(name + " connected");
 	}
@@ -96,7 +96,7 @@ public class Amazons extends GamePlayer{
 				qcurr.get(0), qcurr.get(1), true);
 	}
 /* handle a move made by this player --- send the info to the server.
-     * @param x queen row index 
+     * @param x queen row index
      * @param y queen col index
      * @param arow arrow row index
      * @param acol arrow col index
@@ -105,7 +105,7 @@ public class Amazons extends GamePlayer{
      */
 
  public void playerMove(int x, int y, int arow, int acol, int qfr, int qfc){
-		 
+
 	int[] qf = new int[2];
 	qf[0] = qfr;
 	qf[1] = qfc;
@@ -120,52 +120,52 @@ public class Amazons extends GamePlayer{
         java.util.Timer timer = new java.util.Timer();
         MyTimer newTimer = new MyTimer(gameClient, qf, qn, ar);
         timer.schedule(newTimer, 10000);
-	//To send a move message, call this method with the required data  
+	//To send a move message, call this method with the required data
 	//this.gameClient.sendMoveMessage(qf, qn, ar);
-	
+
 	//Task: Replace the above with a timed task to wait for 10 seconds befor sending the move
-	
+
     }
-	  
+
     //set up the game board
     private void setupGUI(){
 	    guiFrame = new JFrame();
-		   
+
 		guiFrame.setSize(800, 600);
-		guiFrame.setTitle("Game of the Amazons (COSC 322, )" + this.userName());	
-		
+		guiFrame.setTitle("Game of the Amazons (COSC 322, )" + this.userName());
+
 		guiFrame.setLocation(200, 200);
 		guiFrame.setVisible(true);
-	    guiFrame.repaint();		
+	    guiFrame.repaint();
 		guiFrame.setLayout(null);
-		
+
 		Container contentPane = guiFrame.getContentPane();
-		contentPane.setLayout(new  BorderLayout());
-		 
-		contentPane.add(Box.createVerticalGlue()); 
-		
-		board = createGameBoard();		
-		contentPane.add(board,  BorderLayout.CENTER);
+		contentPane.setLayout(new BorderLayout());
+
+		contentPane.add(Box.createVerticalGlue());
+
+		board = createGameBoard();
+		contentPane.add(board, BorderLayout.CENTER);
     }
-    
+
     private GameBoard createGameBoard(){
 	return new GameBoard(this);
-    }	
-		
+    }
+
     public boolean handleMessage(String msg) {
-	System.out.println("Time Out ------ " + msg); 
+	System.out.println("Time Out ------ " + msg);
 	return true;
     }
 
     @Override
-    public String userName() { 
+    public String userName() {
 	return usrName;
     }
-	
+
 
     /**
      * The game board
-     * 
+     *
      * @author yongg
      *
      */
@@ -173,11 +173,11 @@ public class Amazons extends GamePlayer{
 
 	    private static final long serialVersionUID = 1L;
 	    private  int rows = 10;
-	    private  int cols = 10; 
+	    private  int cols = 10;
 
 	    int width = 500;
 	    int height = 500;
-	    int cellDim = width / 10; 
+	    int cellDim = width / 10;
 	    int offset = width / 20;
 
 	    int posX = -1;
@@ -187,19 +187,19 @@ public class Amazons extends GamePlayer{
 	    int c = 0;
 
 
-	    Amazons game = null; 
+	    Amazons game = null;
 	private BoardGameModel gameModel = null;
 
 	    boolean playerAMove;
 
 	    public GameBoard(Amazons game){
-	    this.game = game;	       
+	    this.game = game;
 	    gameModel = new BoardGameModel(this.rows + 1, this.cols + 1);
 
 	    //if(!game.isGamebot){
 		    addMouseListener(new  GameEventHandler());
 	    //}
-	    init(true);	
+	    init(true);
 	    }
 
 
@@ -218,27 +218,27 @@ public class Amazons extends GamePlayer{
 	    gameModel.gameBoard[8][1] = tagB;
 	    gameModel.gameBoard[8][10] = tagB;
 	    gameModel.gameBoard[10][4] = tagB;
-	    gameModel.gameBoard[10][7] = tagB;		
+	    gameModel.gameBoard[10][7] = tagB;
 	    }
 
 
 	    /**
 	     * repaint the part of the board
 	     * @param qrow queen row index
-	     * @param qcol queen col index 
+	     * @param qcol queen col index
 	     * @param arow arrow row index
      * @param acol arrow col index
      * @param qfr queen original row
      * @param qfc queen original col
 	     */
-	    public boolean markPosition(int qrow, int qcol, int arow, int acol, 
-			      int qfr, int qfc, boolean  opponentMove){						
+	    public boolean markPosition(int qrow, int qcol, int arow, int acol,
+			      int qfr, int qfc, boolean  opponentMove){
 
-		    System.out.println(qrow + ", " + qcol + ", " + arow + ", " + acol 
+		    System.out.println(qrow + ", " + qcol + ", " + arow + ", " + acol
 				    + ", " + qfr + ", " + qfc);
 
 		    boolean valid = gameModel.positionMarked(qrow, qcol, arow, acol, qfr, qfc, opponentMove);
-		    repaint();						
+		    repaint();
 		    return valid;
 	    }
 
@@ -248,7 +248,7 @@ public class Amazons extends GamePlayer{
 
 		    for(int i = 0; i < rows + 1; i++){
 			    g.drawLine(i * cellDim + offset, offset, i * cellDim + offset, rows * cellDim + offset);
-			    g.drawLine(offset, i*cellDim + offset, cols * cellDim + offset, i*cellDim + offset);					 
+			    g.drawLine(offset, i*cellDim + offset, cols * cellDim + offset, i*cellDim + offset);
 		    }
 
 		    for(int r = 0; r < rows; r++){
@@ -260,13 +260,13 @@ public class Amazons extends GamePlayer{
 				    posY = (9 - r) * cellDim + offset;
 
 			    if(gameModel.gameBoard[r + 1][c + 1].equalsIgnoreCase(BoardGameModel.POS_AVAILABLE)){
-				    g.clearRect(posX + 1, posY + 1, 49, 49);					
+				    g.clearRect(posX + 1, posY + 1, 49, 49);
 			    }
 
 			    if(gameModel.gameBoard[r + 1][c + 1].equalsIgnoreCase(
 					      BoardGameModel.POS_MARKED_BLACK)){
 				    g.fillOval(posX, posY, 50, 50);
-			    } 
+			    }
 			    else if(gameModel.gameBoard[r + 1][c + 1].equalsIgnoreCase(
 				      BoardGameModel.POS_MARKED_ARROW)) {
 				    g.clearRect(posX + 1, posY + 1, 49, 49);
@@ -288,7 +288,7 @@ public class Amazons extends GamePlayer{
 
 	    /**
 	     * Handle mouse events
-	     * 
+	     *
 	     * @author yongg
 	     */
 	    public class GameEventHandler extends MouseAdapter {
@@ -302,12 +302,12 @@ public class Amazons extends GamePlayer{
 			int qfc = 0;
 
 			int arow = 0;
-			int acol = 0; 
+			int acol = 0;
 
 		public void mousePressed(MouseEvent e) {
 
 		    if(!gameStarted){
-			    //return; 
+			    //return;
 		    }
 
 		int x = e.getX();
@@ -318,7 +318,7 @@ public class Amazons extends GamePlayer{
 		    return;
 		}
 
-		int row = (y - offset) / cellDim + 1;                        
+		int row = (y - offset) / cellDim + 1;
 		int col = (x - offset) / cellDim + 1;
 
 		if(counter == 0){
@@ -344,7 +344,7 @@ public class Amazons extends GamePlayer{
 		}
 
 		if(counter == 3){
-		  counter = 0; 	
+		  counter = 0;
 		  boolean validMove = markPosition(qrow, qcol, arow, acol, qfr, qfc, false); // update itself
 
 		  if(validMove){
@@ -357,10 +357,10 @@ public class Amazons extends GamePlayer{
 		  acol = 0;
 
 		}
-		}			 
-	     }//end of GameEventHandler		
+		}
+	     }//end of GameEventHandler
 
-    }//end of GameBoard  
+    }//end of GameBoard
 
     class BoardGameModel extends GameModel {
 
@@ -368,17 +368,17 @@ public class Amazons extends GamePlayer{
 	public static final String POS_MARKED_WHITE = "white";
 	public static final String POS_MARKED_ARROW = "arrow";
 	public static final String POS_AVAILABLE = "available";
-	
-	String[][] gameBoard = null; 
+
+	String[][] gameBoard = null;
 	//int[][] posScores = null;
-	
-	
+
+
 	/**
 	 * @param rows
 	 * @param columns
 	 */
 	public BoardGameModel(int rows, int columns){
-		
+
 		gameBoard = new String[rows + 1][columns + 1];
 		//posScores = new int[rows][columns];
 		for(int i = 1; i < rows + 1; i++){
@@ -388,33 +388,33 @@ public class Amazons extends GamePlayer{
 			}
 		}
 	}
-	
-	
+
+
 	public boolean positionMarked(int row, int column, int arow, int acol,
 			 int qfr, int qfc, boolean opponentMove){
 		boolean valid = true;
-		
- 
-		
-		if(row >= gameBoard.length | column >= gameBoard.length 
+
+
+
+		if(row >= gameBoard.length | column >= gameBoard.length
 				 || row <= 0 || column <= 0){
 			valid = false;
 		}
 		else if (!gameBoard[row][column].equalsIgnoreCase(BoardGameModel.POS_AVAILABLE)){
 			valid = false;
 		}
-        
+
 		if(valid){
-			gameBoard[row][column] = gameBoard[qfr][qfc];		
-			gameBoard[qfr][qfc] = BoardGameModel.POS_AVAILABLE;		
+			gameBoard[row][column] = gameBoard[qfr][qfc];
+			gameBoard[qfr][qfc] = BoardGameModel.POS_AVAILABLE;
 			gameBoard[arow][acol] = BoardGameModel.POS_MARKED_ARROW;
 		}
-		
+
 		//System.out.println(this.toString());
-		
+
 		return valid;
-	}	
-	
+	}
+
 	public String toString(){
       String b = null;
 
@@ -423,40 +423,42 @@ public class Amazons extends GamePlayer{
 		b = b + gameBoard[i][j] + " ";
 	      }
 	      b = b + "\n";
-      }  	  
+      }
       return b;
-    }	
     }
-	
+    }
+
     class MyTimer extends TimerTask{
 	GameClient gameClient = null;
 	int[] qf;
 	int[] qn;
 	int[] ar;
-	
-	public MyTimer(GameClient gameClient, int[] qf, int[] qn, int[] ar){	
+
+	public MyTimer(GameClient gameClient, int[] qf, int[] qn, int[] ar){
 	    this.gameClient = gameClient;
 	    this.qf = qf;
 	    this.qn = qn;
 	    this.ar = ar;
 	}
-		
+
 	/**
-	 * send the move 
+	 * send the move
 	 */
 	public void run() {
 		gameClient.sendMoveMessage(qf, qn, ar);
 	}
     }
-    
+
     /**
-     * Constructor 
+     * Constructor
      * @param args
      */
-    public static void main(String[] args) { 
-        Amazons game02 = new Amazons("player-02", "02");
-	Amazons game01 = new Amazons("player-01", "01");
-	
-	//Amazons game = new Amazons(args[0], args[1]);		
+    public static void main(String[] args) {
+		Amazons game01 = new Amazons("player-01", "01");
+		Amazons game02 = new Amazons("player-02", "02");
+		Amazons game03 = new Amazons("player-03", "03");
+
+
+		//Amazons game = new Amazons(args[0], args[1]);
     }
 }//end of Amazon
