@@ -12,8 +12,8 @@ import java.util.ArrayList;
  *
  * @author ansaerturk
  */
-public class GConstraint {
-
+public class GConstraints {
+    private boolean enemyAction;
     Tile[][] gameboard = new Tile[10][10];
     Queen[] opponent;
     Queen[] ally;
@@ -23,7 +23,7 @@ public class GConstraint {
 
     //Constructor starting the game and board map
     //1st move
-    public GConstraint(boolean go) {
+    public GConstraints(boolean go) {
         if(go) {
 
             //there can be a smarter way to implement this grid layout
@@ -73,10 +73,162 @@ public class GConstraint {
     public void updatedQmove() {
         Qmove.clear();
         for(Queen Q: ally) {
-            Qmove.addAll(getmoves(Q));
+            Qmove.addAll(getValidMoves(Q));
         }
     }
 
-    //Implement getmoves here
-    //test git push
+    //Check moves Queen is able to implement, returns best move
+
+    public ArrayList<Queen> getValidMoves(Queen queen) { //getLegalMoves
+        ArrayList<Queen> validMoves = new ArrayList<>();
+        int cRow = queen.row;
+        int cCol = queen.col;
+
+        /*
+            Horizontal Movement Check
+         */
+
+        // valid moves left
+        for(int i = 1; cCol - i >= 0; i++) {
+            if(gameboard[cRow][cCol-i] == null) {
+                validMoves.add(new Queen(cRow, cCol-i));
+            }
+            else {
+                break;
+            }
+        }
+
+        // valid moves right
+        for(int i = 1; cCol + i <= 9; i++) {
+            if(gameboard[cRow][cCol+i] == null) {
+                validMoves.add(new Queen(cRow, cCol+i));
+            }
+            else {
+                break;
+            }
+        }
+
+
+        /*
+            Vertical Movements Check
+         */
+
+        // valid moves up
+        for(int i = 1; cRow - i >= 0; i++) {
+            if(gameboard[cRow-i][cCol] == null) {
+                validMoves.add(new Queen(cRow-i, cCol));
+            }
+            else {
+                break;
+            }
+        }
+
+        // valid moves down
+        for(int i = 1; cRow + i <= 9; i++) {
+            if(gameboard[cRow+i][cCol] == null) {
+                validMoves.add(new Queen(cRow+i, cCol));
+            }
+            else {
+                break;
+            }
+        }
+
+
+        /*
+            Diagonal Movement Check
+         */
+
+
+        // valid moves diagonally left upwards
+        for(int i = 1; cRow - i >= 0 && cCol - i >= 0; i++) {
+            if(gameboard[cRow-i][cCol-i] == null) {
+                validMoves.add(new Queen(cRow-i, cCol-i));
+            }
+            else {
+                break;
+            }
+        }
+
+        // valid moves diagonally left downwards
+        for(int i = 1; cRow + i <= 9 && cCol - i >= 0; i++) {
+            if(gameboard[cRow+i][cCol-i] == null) {
+                validMoves.add(new Queen(cRow+i, cCol-i));
+            }
+            else {
+                break;
+            }
+        }
+
+        // valid moves diagonally right upwards
+        for(int i = 1; cRow - i >= 0 && cCol + i <= 9; i++) {
+            if(gameboard[cRow-i][cCol+i] == null) {
+                validMoves.add(new Queen(cRow-i, cCol+i));
+            }
+            else {
+                break;
+            }
+        }
+
+        // valid moves diagonally right downwards
+        for(int i = 1; cRow + i <= 9 && cCol + i <= 9; i++) {
+            if(gameboard[cRow+i][cCol+i] == null) {
+                validMoves.add(new Queen(cRow+i, cCol+i));
+            }
+            else {
+                break;
+            }
+        }
+
+        return validMoves;
+
+    } // end getValidMoves
+
+    //potential queens that can move from enemy side
+    public void enemyPotentialAction() { //canEnemyMove
+        for(Queen q: opponent) {
+            int firstRow = q.row;
+            int firstCol = q.col;
+
+            if(firstRow - 1 >= 0 && gameboard[firstRow - 1][firstCol] == null){
+                enemyAction = true;
+                break;
+            }
+
+            if(firstRow + 1 <= 9 && gameboard[firstRow + 1][firstCol] == null){
+                enemyAction = true;
+                break;
+            }
+
+            if(firstCol - 1 >= 0 && gameboard[firstRow][firstCol - 1] == null){
+                enemyAction = true;
+                break;
+            }
+            if(firstCol + 1 <= 9 && gameboard[firstRow][firstCol + 1] == null){
+                enemyAction = true;
+                break;
+            }
+
+            if((firstRow - 1 >= 0 && firstCol - 1 >= 0) && gameboard[firstRow - 1][firstCol - 1] == null){
+                enemyAction = true;
+                break;
+            }
+
+            if((firstRow + 1 <= 9 && firstCol - 1 >= 0) && gameboard[firstRow + 1][firstCol - 1] == null){
+                enemyAction = true;
+                break;
+            }
+
+            if((firstRow + 1 <= 9 && firstCol + 1 <= 9) && gameboard[firstRow + 1][firstCol + 1] == null){
+                enemyAction = true;
+                break;
+            }
+            if((firstRow - 1 >= 0 && firstCol + 1 <= 9) && gameboard[firstRow - 1][firstCol + 1] == null){
+                enemyAction = true;
+                break;
+            }
+        }
+    } // end of enemyPotentialAction
+
+
 }
+
