@@ -21,7 +21,12 @@ neutral.
 squares they can reach in the same way as described in step 1. Keep repeating step 2
 and 3 until either of them cannot put any more markers on the board. 
 
-Additional subjects we must observe:
+Additional subjects we must observe:/
+/
+/
+/
+#Refereces:/
+https://project.dke.maastrichtuniversity.nl/games/files/msc/Hensgens_thesis.pdf
 
 
 
