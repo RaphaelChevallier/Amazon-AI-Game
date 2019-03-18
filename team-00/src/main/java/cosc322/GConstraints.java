@@ -15,8 +15,8 @@ import java.util.ArrayList;
 public class GConstraints {
     private boolean enemyAction;
     Tile[][] gameboard = new Tile[10][10];
-    Queen[] opponent;
-    Queen[] ally;
+    Queen[] friend;
+    Queen[] foe;
     boolean opposition;
     ArrayList<Arrow> arrows;
     ArrayList<Queen> Qmove;
@@ -24,42 +24,31 @@ public class GConstraints {
     //Constructor starting the game and board map
     //1st move
     public GConstraints(boolean go) {
-        if(go) {
+        
 
-            //there can be a smarter way to implement this grid layout
-            gameboard = new Tile[][] {
-                    { null, null, null, new Queen(0, 3, true), null, null, new Queen(0, 6, true), null, null, null },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { new Queen(3, 0, true), null, null, null, null, null, null, null, null, new Queen(3, 9, true) },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { new Queen(6, 0, false), null, null, null, null, null, null, null, null, new Queen(6, 9, false) },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { null, null, null, new Queen(9, 3, false), null, null, new Queen(9, 6, false), null, null, null } };
-
-
-            opponent = new Queen[] { (Queen) gameboard[0][3], (Queen) gameboard[0][6], (Queen) gameboard[3][0], (Queen) gameboard[3][9] };
-            ally = new Queen[] { (Queen) gameboard[6][0], (Queen) gameboard[6][9], (Queen) gameboard[9][3], (Queen) gameboard[9][6] };
-
+            //gameboard layout
+            gameboard = new Tile[10][10];
+            for(int i = 0; i < gameboard.length; i++){
+                for(int j = 0; j < gameboard[0].length; j++ ){
+                    gameboard[i][j] = null;
+                }
+            }
+            gameboard[0][3] = new Queen(0,3, true);
+            gameboard[0][6] = new Queen(0,6, true);
+            gameboard[3][0] = new Queen(3,0, true);
+            gameboard[3][9] = new Queen(3,9, true);
+            gameboard[6][0] = new Queen(6,0, true);
+            gameboard[6][9] = new Queen(6,9, true);
+            gameboard[9][6] = new Queen(9,6, true);
+            gameboard[9][3] = new Queen(9,3, true);
+            if(go) {
+            foe = new Queen[] { (Queen) gameboard[0][3], (Queen) gameboard[0][6], (Queen) gameboard[3][0], (Queen) gameboard[3][9] };
+            friend = new Queen[] { (Queen) gameboard[6][0], (Queen) gameboard[6][9], (Queen) gameboard[9][3], (Queen) gameboard[9][6] };
         }
-
         else {
-            gameboard = new Tile[][] {
-                    { null, null, null, new Queen(0, 3, false), null, null, new Queen(0, 6, false), null, null, null },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { new Queen(3, 0, false), null, null, null, null, null, null, null, null, new Queen(3, 9, false) },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { new Queen(6, 0, true), null, null, null, null, null, null, null, null, new Queen(6, 9, true) },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { null, null, null, null, null, null, null, null, null, null },
-                    { null, null, null, new Queen(9, 3, true), null, null, new Queen(9, 6, true), null, null, null } };
 
-            ally = new Queen[] { (Queen) gameboard[0][3], (Queen) gameboard[0][6], (Queen) gameboard[3][0], (Queen) gameboard[3][9] };
-            opponent = new Queen[] { (Queen) gameboard[6][0], (Queen) gameboard[6][9], (Queen) gameboard[9][3],	(Queen) gameboard[9][6] };
+            friend = new Queen[] { (Queen) gameboard[0][3], (Queen) gameboard[0][6], (Queen) gameboard[3][0], (Queen) gameboard[3][9] };
+            foe= new Queen[] { (Queen) gameboard[6][0], (Queen) gameboard[6][9], (Queen) gameboard[9][3],	(Queen) gameboard[9][6] };
         }
 
         //list to keep track of arrows queens
@@ -72,7 +61,7 @@ public class GConstraints {
 
     public void updatedQmove() {
         Qmove.clear();
-        for(Queen Q: ally) {
+        for(Queen Q: friend) {
             Qmove.addAll(getValidMoves(Q));
         }
     }
@@ -185,7 +174,7 @@ public class GConstraints {
 
     //potential queens that can move from enemy side
     public void enemyPotentialAction() { //canEnemyMove
-        for(Queen q: opponent) {
+        for(Queen q: foe) {
             int firstRow = q.row;
             int firstCol = q.col;
 
