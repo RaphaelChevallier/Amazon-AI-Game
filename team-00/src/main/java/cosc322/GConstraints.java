@@ -12,8 +12,8 @@ import java.util.ArrayList;
  *
  * @author ansaerturk
  */
-public class GConstraints {
-    private boolean enemyAction;
+public class GConstraint {
+
     Tile[][] gameboard = new Tile[10][10];
     Queen[] opponent;
     Queen[] ally;
@@ -23,7 +23,7 @@ public class GConstraints {
 
     //Constructor starting the game and board map
     //1st move
-    public GConstraints(boolean go) {
+    public GConstraint(boolean go) {
         if(go) {
 
             //there can be a smarter way to implement this grid layout
@@ -73,162 +73,80 @@ public class GConstraints {
     public void updatedQmove() {
         Qmove.clear();
         for(Queen Q: ally) {
-            Qmove.addAll(getValidMoves(Q));
+            Qmove.addAll(getmoves(Q));
         }
     }
 
-    //Check moves Queen is able to implement, returns best move
+     protected void addArrow(Arrow arrownew) {
+        arrows.add(arrownew);
+        updatemove();
+    } 
 
-    public ArrayList<Queen> getValidMoves(Queen queen) { //getLegalMoves
-        ArrayList<Queen> validMoves = new ArrayList<>();
-        int cRow = queen.row;
-        int cCol = queen.col;
-
-        /*
-            Horizontal Movement Check
-         */
-
-        // valid moves left
-        for(int i = 1; cCol - i >= 0; i++) {
-            if(gameboard[cRow][cCol-i] == null) {
-                validMoves.add(new Queen(cRow, cCol-i));
-            }
-            else {
-                break;
+    private void resetboard() {
+        for(int i = 0; i <= 9; i++) {
+            for(int j = 0; j <= 9; j++) {
+                gameboard[i][j] = null;
             }
         }
+    } 
 
-        // valid moves right
-        for(int i = 1; cCol + i <= 9; i++) {
-            if(gameboard[cRow][cCol+i] == null) {
-                validMoves.add(new Queen(cRow, cCol+i));
-            }
-            else {
-                break;
-            }
+  //update after each move
+    protected void updatemove() {
+        resetboard();
+
+        for(Queen q: ally) {
+        	if(ally != null){
+        		gameboard[q.row][q.col] = q;
+        	}
         }
 
-
-        /*
-            Vertical Movements Check
-         */
-
-        // valid moves up
-        for(int i = 1; cRow - i >= 0; i++) {
-            if(gameboard[cRow-i][cCol] == null) {
-                validMoves.add(new Queen(cRow-i, cCol));
-            }
-            else {
-                break;
-            }
-        }
-
-        // valid moves down
-        for(int i = 1; cRow + i <= 9; i++) {
-            if(gameboard[cRow+i][cCol] == null) {
-                validMoves.add(new Queen(cRow+i, cCol));
-            }
-            else {
-                break;
-            }
-        }
-
-
-        /*
-            Diagonal Movement Check
-         */
-
-
-        // valid moves diagonally left upwards
-        for(int i = 1; cRow - i >= 0 && cCol - i >= 0; i++) {
-            if(gameboard[cRow-i][cCol-i] == null) {
-                validMoves.add(new Queen(cRow-i, cCol-i));
-            }
-            else {
-                break;
-            }
-        }
-
-        // valid moves diagonally left downwards
-        for(int i = 1; cRow + i <= 9 && cCol - i >= 0; i++) {
-            if(gameboard[cRow+i][cCol-i] == null) {
-                validMoves.add(new Queen(cRow+i, cCol-i));
-            }
-            else {
-                break;
-            }
-        }
-
-        // valid moves diagonally right upwards
-        for(int i = 1; cRow - i >= 0 && cCol + i <= 9; i++) {
-            if(gameboard[cRow-i][cCol+i] == null) {
-                validMoves.add(new Queen(cRow-i, cCol+i));
-            }
-            else {
-                break;
-            }
-        }
-
-        // valid moves diagonally right downwards
-        for(int i = 1; cRow + i <= 9 && cCol + i <= 9; i++) {
-            if(gameboard[cRow+i][cCol+i] == null) {
-                validMoves.add(new Queen(cRow+i, cCol+i));
-            }
-            else {
-                break;
-            }
-        }
-
-        return validMoves;
-
-    } // end getValidMoves
-
-    //potential queens that can move from enemy side
-    public void enemyPotentialAction() { //canEnemyMove
         for(Queen q: opponent) {
-            int firstRow = q.row;
-            int firstCol = q.col;
-
-            if(firstRow - 1 >= 0 && gameboard[firstRow - 1][firstCol] == null){
-                enemyAction = true;
-                break;
-            }
-
-            if(firstRow + 1 <= 9 && gameboard[firstRow + 1][firstCol] == null){
-                enemyAction = true;
-                break;
-            }
-
-            if(firstCol - 1 >= 0 && gameboard[firstRow][firstCol - 1] == null){
-                enemyAction = true;
-                break;
-            }
-            if(firstCol + 1 <= 9 && gameboard[firstRow][firstCol + 1] == null){
-                enemyAction = true;
-                break;
-            }
-
-            if((firstRow - 1 >= 0 && firstCol - 1 >= 0) && gameboard[firstRow - 1][firstCol - 1] == null){
-                enemyAction = true;
-                break;
-            }
-
-            if((firstRow + 1 <= 9 && firstCol - 1 >= 0) && gameboard[firstRow + 1][firstCol - 1] == null){
-                enemyAction = true;
-                break;
-            }
-
-            if((firstRow + 1 <= 9 && firstCol + 1 <= 9) && gameboard[firstRow + 1][firstCol + 1] == null){
-                enemyAction = true;
-                break;
-            }
-            if((firstRow - 1 >= 0 && firstCol + 1 <= 9) && gameboard[firstRow - 1][firstCol + 1] == null){
-                enemyAction = true;
-                break;
-            }
+        	if(opponent != null) {
+                gameboard[q.row][q.col] = q;
+        	}
         }
-    } // end of enemyPotentialAction
+
+        for(Arrow arrow: arrows) {
+            if(arrow != null) {
+                gameboard[arrow.row][arrow.col] = arrow;
+            } } }
 
 
+    //decides winner and loser
+    protected boolean finalresult() {
+        if (opposition == false || Qmove.size() == 0) {
+            if (opposition == false) {
+                System.out.println("Opponent Lost");
+            } else {
+                System.out.println("Opponent Won");
+            }
+            return true;
+        }
+        else {
+            return false;
+        } }
+     
+
+
+    public void outputboard() {
+        String layout = "";
+        String ln = "\nx--- --- --- --- --- --- --- --- --- ---x";
+        for (int i = 0; i < 10; i++) {
+            layout += ln + "\n";
+            for (int j = 0; j < 10; j++) {
+                layout += "| ";
+                if (gameboard[i][j] == null) layout += "  ";
+                else if (gameboard[i][j] instanceof Queen) {
+                    if (gameboard[i][j] == enemyfind()[0] || gameboard[i][j] == enemyfind()[1] ||
+                            gameboard[i][j] == enemyfind()[2] || gameboard[i][j] == enemyfind()[3]) {
+                        layout += "B ";
+                    } else layout += "W ";
+                } else layout += "a ";
+            }
+            layout += "|";
+        }
+        layout += ln;
+        System.out.println(layout);
+    } 
 }
 
