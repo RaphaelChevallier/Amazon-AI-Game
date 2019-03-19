@@ -124,16 +124,11 @@ public class GConstraints {
 
     //Check moves Queen is able to implement, returns best move
 
-    public ArrayList<Queen> getValidMoves(Queen queen) { //getLegalMoves
+    public ArrayList<Queen> getValidMoves(Queen queen) {
         ArrayList<Queen> validMoves = new ArrayList<>();
         int cRow = queen.row;
         int cCol = queen.col;
 
-        /*
-            Horizontal Movement Check
-         */
-
-        // valid moves left
         for(int i = 1; cCol - i >= 0; i++) {
             if(gameboard[cRow][cCol-i] == null) {
                 validMoves.add(new Queen(cRow, cCol-i));
@@ -143,7 +138,7 @@ public class GConstraints {
             }
         }
 
-        // valid moves right
+
         for(int i = 1; cCol + i <= 9; i++) {
             if(gameboard[cRow][cCol+i] == null) {
                 validMoves.add(new Queen(cRow, cCol+i));
@@ -153,12 +148,6 @@ public class GConstraints {
             }
         }
 
-
-        /*
-            Vertical Movements Check
-         */
-
-        // valid moves up
         for(int i = 1; cRow - i >= 0; i++) {
             if(gameboard[cRow-i][cCol] == null) {
                 validMoves.add(new Queen(cRow-i, cCol));
@@ -168,7 +157,6 @@ public class GConstraints {
             }
         }
 
-        // valid moves down
         for(int i = 1; cRow + i <= 9; i++) {
             if(gameboard[cRow+i][cCol] == null) {
                 validMoves.add(new Queen(cRow+i, cCol));
@@ -178,13 +166,6 @@ public class GConstraints {
             }
         }
 
-
-        /*
-            Diagonal Movement Check
-         */
-
-
-        // valid moves diagonally left upwards
         for(int i = 1; cRow - i >= 0 && cCol - i >= 0; i++) {
             if(gameboard[cRow-i][cCol-i] == null) {
                 validMoves.add(new Queen(cRow-i, cCol-i));
@@ -194,7 +175,6 @@ public class GConstraints {
             }
         }
 
-        // valid moves diagonally left downwards
         for(int i = 1; cRow + i <= 9 && cCol - i >= 0; i++) {
             if(gameboard[cRow+i][cCol-i] == null) {
                 validMoves.add(new Queen(cRow+i, cCol-i));
@@ -226,7 +206,7 @@ public class GConstraints {
 
         return validMoves;
 
-    } // end getValidMoves
+    }
     public ArrayList<Arrow> arrowMoves(int row, int col){
         ArrayList<Arrow> allowedMoves = new ArrayList<>();
         int currentRow = row;
@@ -264,7 +244,6 @@ public class GConstraints {
             }
         }
         //left and up
-        
         for(int i = 1; currentColumn - i>= 0 && currentRow - i >=0; i++){
             if(gameboard[currentRow - i][currentColumn-i] !=null){
                 break;
@@ -305,7 +284,7 @@ public class GConstraints {
     }
 
     //potential queens that can move from enemy side
-    public void enemyPotentialAction() { //canEnemyMove
+    public void enemyPotentialAction() {
         for(Queen q: foe) {
             int firstRow = q.row;
             int firstCol = q.col;

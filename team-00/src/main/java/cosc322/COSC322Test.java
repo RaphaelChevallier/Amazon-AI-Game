@@ -21,8 +21,29 @@ public class COSC322Test extends GamePlayer{
      * The main method
      * @param args for name and passwd (current, any string would work)
      */
-    public static void main(String[] args) {				 
-	COSC322Test player_01 = new COSC322Test("Raphael Chevallier", "maybenot");
+    public static void main(String[] args) {
+        //this is our connect server
+        GameClient gameClient;
+        GamePlayer player1 = new GamePlayer() {
+            @Override
+            public void onLogin() {
+                System.out.println("Logging in");
+            }
+            @Override
+            public String userName() {
+                return "Raphael Chevallier";
+            }
+            @Override
+            public boolean handleGameMessage(String s, Map<String, Object> map) {
+                return true;
+            }
+        };
+        if (args.length >= 2)//if input, use input
+            gameClient = new GameClient(args[0], args[1], player1);
+        else//default to best user
+            gameClient = new GameClient("Yong", "Gao", player1);
+        System.out.println(player1.userName());
+
     }
 	
     /**
@@ -31,33 +52,30 @@ public class COSC322Test extends GamePlayer{
      * @param passwd
      */
     public COSC322Test(String userName, String passwd) {
-	this.userName = userName;
-	gameClient = new GameClient(userName, passwd, this);
-    }
+        this.userName = userName;
+        gameClient = new GameClient(userName, passwd);
+        }
 
-    @Override
-    public boolean handleGameMessage(String messageType, Map<String, Object> msgDetails) {
-	//This method will be called by the GameClient when it receives a game-related message
-	//from the server.
-	
-	//For a detailed description of the message types and format, 
-	//see the method GamePlayer.handleGameMessage() in the game-client-api document. 
-	return true;
-    }
+        @Override
+        public boolean handleGameMessage(String messageType, Map<String, Object> msgDetails) {
+        //This method will be called by the GameClient when it receives a game-related message
+        //from the server.
 
-    @Override
-    public void onLogin() {
-	System.out.println("Congratualations!!! "
-	    + "I am called because the server indicated that the login is successfully");
-	System.out.println("The next step is to find a room and join it: "
-	    + "the gameClient instance created in my constructor knows how!");
-	System.out.println(this.gameClient.getRoomList());
-	this.gameClient.logout();
-    }
+        //For a detailed description of the message types and format,
+        //see the method GamePlayer.handleGameMessage() in the game-client-api document.
+        return true;
+        }
+
+        @Override
+        public void onLogin() {
+        System.out.println("Logged in");
+        System.out.println(this.gameClient.getRoomList());
+        //this.gameClient.logout();
+        }
 
 
-    @Override
-    public String userName() {
-	return userName;
-    }
+        @Override
+        public String userName() {
+        return userName;
+        }
 }//end of class
