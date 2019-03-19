@@ -25,6 +25,11 @@ public class Amazons extends GamePlayer{
 	private GameBoard board = null;
 	private boolean gameStarted = false;
 	public String usrName = null;
+        private GConstraints ourBoard = null;
+        String self;
+        String other;
+        int turn;
+        private GConstraints personalBoard = null;
 
 	/**
 	 * Constructor
@@ -55,7 +60,7 @@ public class Amazons extends GamePlayer{
 
 		//once logged in, the gameClient will have  the names of available game rooms
 		ArrayList<String> rooms = gameClient.getRoomList();
-		this.gameClient.joinRoom(rooms.get(0));
+		this.gameClient.joinRoom(rooms.get(0));//this can be changed for different rooms
 	}
 
 
@@ -73,7 +78,28 @@ public class Amazons extends GamePlayer{
 		if(messageType.equals(GameMessage.GAME_ACTION_START)){
 			if(((String) msgDetails.get("player-black")).equals(this.userName())){
 				System.out.println("Game State: " +  msgDetails.get("player-black"));
-			}
+			self = "Player 1: " + this.userName();
+                        other = "Player 2: " + msgDetails.get("player-black");
+                        turn++;
+                         guiFrame.setTitle("Turn: " + turn + ", Move: " + userName() + ", " + self + ", " + other);
+                        ourBoard = new GConstraints(true);
+                        ourBoard.printBoard();
+                        ourBoard.enemyPotentialAction();
+                        search = new SearchTree(new TreeNodes(ourBoard));
+                        TreeNodes bestMove - search.makeMove();
+                        Queen myMove = bestMove.getQueen();
+                        Arrow myArrow = bestMove.getArrow();
+                        ourBoard.enemyPotentialAction();
+                        ourBoard.updatedQmove();
+                         board.markPosition(translateRow(myMove.row), translateCol(myMove.col), translateRow(myArrow.getRowPosition()), translateCol(myArrow.getColPosition()), translateRow(myMove.previousRow), translateCol(myMove.previousCol), false);
+                        gameClient.sendMoveMessage(myMove.combinedMove(translateRow(myMove.previousRow), translateCol(myMove.previousCol)), myMove.combinedMove(translateRow(myMove.row), translateCol(myMove.col)), myArrow.combinedMove(translateRow(myArrow.getRowPosition()), translateCol(myArrow.getColPosition())));
+                        ourBoard.printBoard();
+                        }else{
+                            self = "Player 1: " + this.userName();
+                            other = "Player 2: " + msgDetails.get("player-white");
+                            ourBoard = new GConstraints(false);
+                            search = new SearchTree(new TreeNodes(ourBoard));
+                        }
 		}
 		else if(messageType.equals(GameMessage.GAME_ACTION_MOVE)){
 			handleOpponentMove(msgDetails);
@@ -84,6 +110,9 @@ public class Amazons extends GamePlayer{
 
 	//handle the event that the opponent makes a move.
 	private void handleOpponentMove(Map<String, Object> msgDetails){
+            boolean game = false;
+            turn++;
+            guiFrame.setTitle("Turn: " + turn + ", Move: " + userName() + ", " + self + ", " + other);
 		System.out.println("OpponentMove(): " + msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR));
 		ArrayList<Integer> qcurr = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);
 		ArrayList<Integer> qnew = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.Queen_POS_NEXT);
@@ -94,7 +123,52 @@ public class Amazons extends GamePlayer{
 
 		board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1),
 				qcurr.get(0), qcurr.get(1), true);
-	}
+	Queen enemyQ = new Queen(convertRow(qnew.get(0)), convertCol(qnew.get(1)), true);
+                enemyQ.previousRow = convertRow(qcurr.get(0));
+                enemyQ.previousCol = convertCol(qcurr.get(1));
+                Arrow aEnemey = new Arrow(convertRow(arrow.get(0)), convertCol(arrow.get(1)));
+                search.makeMoveOnRoot(enemyQ, aEnemy);
+                board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1), qcurr.get(0), qcurr.get(1), true);
+                ourBoard.enemyPotentialAction();
+                ourBoard.updatedQmove();
+                ourBoard.printBoard();
+                
+                game = ourBoard.goalTest();
+                
+                if(game){
+                    System.out.println("\n Game Over\n");
+                }
+                turn++;
+                guiFrame.setTitle("Turn: " + turn + ", Move: " + userName() + ", " + self + ", " + other);
+                SearchTreeNode bestMove = search.makeMove();
+                Queen ourMove= bestMove.getQueen();
+                Arrow myArrow = bestMove.getArrowShot();
+                    ourBoard.enemyPotentialAction();
+                    ourBoard.updatedQmove();
+                    board.markPosition(translateRow(ourMove.row), translateCol(ourMove.col), translateRow(myArrow.getRowPosition()), translateCol(myArrow.getColPosition()), translateRow(ourMove.previousRow), translateCol(ourMove.previousCol), false);
+                    gameClient.sendMoveMessage(ourMove.combinedMove(translateRow(ourMove.previousRow), translateCol(ourMove.previousCol)), ourMove.combinedMove(translateRow(ourMove.row), translateCol(ourMove.col)), myArrow.combinedMove(translateRow(myArrow.getRowPosition()), translateCol(myArrow.getColPosition())));
+                  
+                     ourBoard.printBoard();
+                     game = ourBoard.goalTest();
+                     if(game){
+                         System.out.println("\n Game Over\n");
+                     }
+                      
+                    
+                    
+        }
+        public int convertRow(int row){
+            return Math.abs(row - 10);
+        }
+        private int convertCol(int col){
+            return(col -1);
+        }
+        private int translateRow(int row){
+            return Math.abs(10 - row);
+        }
+        private int translateCol(int col){
+            return(col + 1);
+        }
 /* handle a move made by this player --- send the info to the server.
      * @param x queen row index
      * @param y queen col index
