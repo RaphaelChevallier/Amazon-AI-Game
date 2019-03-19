@@ -17,7 +17,7 @@ public class MinMaxTree {
         this.eval = 0;
     }
 
-    public void getDepth() {
+    public int getDepth() {
         TreeNodes n = this.root;
         int tempDepth = 0;
         while (n != null) {
@@ -28,9 +28,9 @@ public class MinMaxTree {
             }
             tempDepth++;
         }
-        this.depth = tempDepth;
+        return tempDepth;
     }
-
+    //Alpha-Beta Pruning method to return significant moves and cut out less valuable ones
     private int Pruning(TreeNodes N, int D, int alpha, int beta, boolean maxPlayer) {
         if (D == 0 || N.getChildren().size() == 0) {
             eval++;
@@ -69,6 +69,7 @@ public class MinMaxTree {
     public void grow() {
         ArrayList<TreeNodes> newFrontier = new ArrayList<>();
         // See if we're at the very first root node
+        depth = getDepth();
         if (depth != 0) {
             if (depth % 2 == 0) {
                 for (TreeNodes S : frontier)
@@ -94,7 +95,8 @@ public class MinMaxTree {
     //how far we'll go with pruning
     public void performAlphaBeta() {
         eval = 0;
-        getDepth();
+        depth = getDepth();
+        
         Pruning(root, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
     }
 

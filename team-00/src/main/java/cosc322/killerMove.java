@@ -9,6 +9,7 @@ package cosc322;
  *
  * @author Tyrel
  */
+//The goal is to take the moves from the alpha beta prune and define killer moves within them
 public class killerMove {
     
 }
