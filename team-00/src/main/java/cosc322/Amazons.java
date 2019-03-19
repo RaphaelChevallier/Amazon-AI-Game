@@ -19,7 +19,7 @@ import java.util.TimerTask;
  * @author yong.gao@ubc.ca
  */
 public class Amazons extends GamePlayer{
-
+	private MinMaxTree MinMax;
 	private GameClient gameClient;
 	private JFrame guiFrame = null;
 	private GameBoard board = null;
@@ -85,20 +85,20 @@ public class Amazons extends GamePlayer{
                         ourBoard = new GConstraints(true);
                         ourBoard.printBoard();
                         ourBoard.enemyPotentialAction();
-                        search = new SearchTree(new TreeNodes(ourBoard));
-                        TreeNodes bestMove - search.makeMove();
+                        MinMax = new MinMaxTree(new TreeNodes(ourBoard));
+                        TreeNodes bestMove = MinMax.Move();
                         Queen myMove = bestMove.getQueen();
                         Arrow myArrow = bestMove.getArrow();
                         ourBoard.enemyPotentialAction();
                         ourBoard.updatedQmove();
-                         board.markPosition(translateRow(myMove.row), translateCol(myMove.col), translateRow(myArrow.getRowPosition()), translateCol(myArrow.getColPosition()), translateRow(myMove.previousRow), translateCol(myMove.previousCol), false);
-                        gameClient.sendMoveMessage(myMove.combinedMove(translateRow(myMove.previousRow), translateCol(myMove.previousCol)), myMove.combinedMove(translateRow(myMove.row), translateCol(myMove.col)), myArrow.combinedMove(translateRow(myArrow.getRowPosition()), translateCol(myArrow.getColPosition())));
+                         board.markPosition(translateRow(myMove.row), translateCol(myMove.col), translateRow(myArrow.getRowPos()), translateCol(myArrow.getColPos()), translateRow(myMove.previousRow), translateCol(myMove.previousCol), false);
+                        gameClient.sendMoveMessage(myMove.combinedMove(translateRow(myMove.previousRow), translateCol(myMove.previousCol)), myMove.combinedMove(translateRow(myMove.row), translateCol(myMove.col)), myArrow.combinedMove(translateRow(myArrow.getRowPos()), translateCol(myArrow.getColPos())));
                         ourBoard.printBoard();
                         }else{
                             self = "Player 1: " + this.userName();
                             other = "Player 2: " + msgDetails.get("player-white");
                             ourBoard = new GConstraints(false);
-                            search = new SearchTree(new TreeNodes(ourBoard));
+                            MinMax = new MinMaxTree(new TreeNodes(ourBoard));
                         }
 		}
 		else if(messageType.equals(GameMessage.GAME_ACTION_MOVE)){
@@ -126,8 +126,8 @@ public class Amazons extends GamePlayer{
 	Queen enemyQ = new Queen(convertRow(qnew.get(0)), convertCol(qnew.get(1)), true);
                 enemyQ.previousRow = convertRow(qcurr.get(0));
                 enemyQ.previousCol = convertCol(qcurr.get(1));
-                Arrow aEnemey = new Arrow(convertRow(arrow.get(0)), convertCol(arrow.get(1)));
-                search.makeMoveOnRoot(enemyQ, aEnemy);
+                Arrow Enemy = new Arrow(convertRow(arrow.get(0)), convertCol(arrow.get(1)));
+                MinMax.rootMove(enemyQ, Enemy);
                 board.markPosition(qnew.get(0), qnew.get(1), arrow.get(0), arrow.get(1), qcurr.get(0), qcurr.get(1), true);
                 ourBoard.enemyPotentialAction();
                 ourBoard.updatedQmove();
@@ -140,13 +140,13 @@ public class Amazons extends GamePlayer{
                 }
                 turn++;
                 guiFrame.setTitle("Turn: " + turn + ", Move: " + userName() + ", " + self + ", " + other);
-                SearchTreeNode bestMove = search.makeMove();
+                TreeNodes bestMove = MinMax.Move();
                 Queen ourMove= bestMove.getQueen();
-                Arrow myArrow = bestMove.getArrowShot();
+                Arrow myArrow = bestMove.getArrow();
                     ourBoard.enemyPotentialAction();
                     ourBoard.updatedQmove();
-                    board.markPosition(translateRow(ourMove.row), translateCol(ourMove.col), translateRow(myArrow.getRowPosition()), translateCol(myArrow.getColPosition()), translateRow(ourMove.previousRow), translateCol(ourMove.previousCol), false);
-                    gameClient.sendMoveMessage(ourMove.combinedMove(translateRow(ourMove.previousRow), translateCol(ourMove.previousCol)), ourMove.combinedMove(translateRow(ourMove.row), translateCol(ourMove.col)), myArrow.combinedMove(translateRow(myArrow.getRowPosition()), translateCol(myArrow.getColPosition())));
+                    board.markPosition(translateRow(ourMove.row), translateCol(ourMove.col), translateRow(myArrow.getRowPos()), translateCol(myArrow.getColPos()), translateRow(ourMove.previousRow), translateCol(ourMove.previousCol), false);
+                    gameClient.sendMoveMessage(ourMove.combinedMove(translateRow(ourMove.previousRow), translateCol(ourMove.previousCol)), ourMove.combinedMove(translateRow(ourMove.row), translateCol(ourMove.col)), myArrow.combinedMove(translateRow(myArrow.getRowPos()), translateCol(myArrow.getColPos())));
                   
                      ourBoard.printBoard();
                      game = ourBoard.goalTest();
@@ -432,9 +432,8 @@ public class Amazons extends GamePlayer{
 
 		}
 		}
-	     }//end of GameEventHandler
-
-    }//end of GameBoard
+	     }
+    }
 
     class BoardGameModel extends GameModel {
 
@@ -532,7 +531,5 @@ public class Amazons extends GamePlayer{
 		Amazons game02 = new Amazons("player-02", "02");
 		Amazons game03 = new Amazons("player-03", "03");
 
-
-		//Amazons game = new Amazons(args[0], args[1]);
     }
-}//end of Amazon
+}
