@@ -24,7 +24,7 @@ public class Amazons extends GamePlayer{
 	private JFrame guiFrame = null;
 	private GameBoard board = null;
 	private boolean gameStarted = false;
-	public String usrName = null;
+	public String userName = null;
         private GConstraints ourBoard = null;
         String self;
         String other;
@@ -38,14 +38,14 @@ public class Amazons extends GamePlayer{
 	 */
 	public Amazons(String name, String passwd){
 
-		this.usrName = name;
+		this.userName = name;
 		setupGUI();
 
-		connectToServer(name, passwd);
-                System.out.println(name + " connected");
+		COSC322Test(name, passwd);
+                System.out.println(name + " just connected");
 	}
 
-	private void connectToServer(String name, String passwd){
+	private void COSC322Test(String name, String passwd){
 		// create a GameClient and use "this" class (a GamePlayer) as the delegate.
 		// the client will take care of the communication with the server.
 		gameClient = new GameClient(name, passwd, this);
@@ -233,7 +233,7 @@ public class Amazons extends GamePlayer{
 
     @Override
     public String userName() {
-	return usrName;
+	return userName;
     }
 
 

@@ -27,7 +27,7 @@ public class COSC322Test extends GamePlayer{
         GamePlayer player1 = new GamePlayer() {
             @Override
             public void onLogin() {
-                System.out.println("Logging in");
+                System.out.println("Logged in");
             }
             @Override
             public String userName() {
