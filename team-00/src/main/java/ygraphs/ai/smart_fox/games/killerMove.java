@@ -56,6 +56,6 @@ public class killerMove {//killer move heuristic
 //                }
 //            }
 //        }
-    }
     
-}
+    
+
