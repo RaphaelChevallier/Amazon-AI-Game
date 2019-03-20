@@ -1,8 +1,5 @@
 
-package cosc322;
-
-import ygraphs.ai.smart_fox.games.GameClient;
-import ygraphs.ai.smart_fox.games.GamePlayer;
+package ygraphs.ai.smart_fox.games;
 
 import java.util.Map;
 
@@ -38,7 +35,7 @@ public class COSC322Test extends GamePlayer{
                 return true;
             }
         };
-        if (args.length >= 2)//if input, use input
+        if (args.length >= 2)
             gameClient = new GameClient(args[0], args[1], player1);
         else//default to best user
             gameClient = new GameClient("Yong", "Gao", player1);

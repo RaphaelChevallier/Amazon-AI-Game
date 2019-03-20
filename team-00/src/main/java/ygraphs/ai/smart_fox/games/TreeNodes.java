@@ -1,4 +1,4 @@
-package cosc322;
+package ygraphs.ai.smart_fox.games;
 
 import java.util.ArrayList;
 
