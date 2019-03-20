@@ -26,6 +26,7 @@ and 3 until either of them cannot put any more markers on the board.
 # References:
 1. https://project.dke.maastrichtuniversity.nl/games/files/msc/Hensgens_thesis.pdf
 2. https://github.com/rmcqueen/Game-of-the-Amazons-AI
+3. https://stackoverflow.com/questions/17692867/implementing-killer-heuristic-in-alpha-beta-search-in-chess
 
 
 
