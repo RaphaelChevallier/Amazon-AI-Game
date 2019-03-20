@@ -37,13 +37,13 @@ public class killerMove {//killer move heuristic
         return null;//if no killer moves are found;
     }
         public ArrayList<TreeNodes> killerInsert(ArrayList<TreeNodes> moves, TreeNodes killerMove){
-        
+        ArrayList<TreeNodes> insertMoves = moves;
         if(killerMoves.isEmpty()){//initializes killer move list
             killerMoves = moves;
         }
-        moves.add(0, killerMove);//add the killer move to the list and shift other moves  to the right
-        if(moves.size()> 6){
-            moves.remove(moves.size() -1);//if the set is too large trim off the last killer move in the list
+        insertMoves.add(0, killerMove);//add the killer move to the list and shift other moves  to the right
+        if(insertMoves.size()> 6){
+            insertMoves.remove(insertMoves.size() -1);//if the set is too large trim off the last killer move in the list
             
         }
         
@@ -56,6 +56,8 @@ public class killerMove {//killer move heuristic
 //                }
 //            }
 //        }
-    
+        return insertMoves;
+        }
+}
     
 
