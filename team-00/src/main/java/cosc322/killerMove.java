@@ -5,6 +5,8 @@
  */
 package cosc322;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Tyrel
@@ -13,20 +15,47 @@ package cosc322;
 public class killerMove {//killer move heuristic
     int numberKillerMoves;
     int ply;
-    int killerMoves[][];
+    ArrayList killerMoves;
     int move;
+    TreeNodes potentialKiller;
     
-    public killerMove(int ply, int numberOfMoves){//ply is distance from root and numberofmoves is killer move total count
-        killerMoves = new int[ply][numberOfMoves];
-        this.ply = ply;
+    public killerMove(){
         
     }
     //pass in a list of moves from the alpha beta prune, and determine whether each is a killer move
-    public void killerPrune(int move){//should replace with data structure for list of moves
-        for(int i = killerMoves[ply].length - 2; i >= 0; i--){
-            killerMoves[ply][i + 1] = killerMoves[ply][i];
+    public TreeNodes killerPrune( ArrayList<TreeNodes> moves){//should replace with data structure for list of moves
+  
+        for(TreeNodes s: moves){
+            potentialKiller = s;
+        ;
+            for(TreeNodes k: moves){
+                if(k == potentialKiller){
+                    return k;
+                }
+            }
         }
-        killerMoves[ply][0] = move;
+        return null;//if no killer moves are found;
+    }
+        public ArrayList<TreeNodes> killerInsert(ArrayList<TreeNodes> moves, TreeNodes killerMove){
+        
+        if(killerMoves.isEmpty()){//initializes killer move list
+            killerMoves = moves;
+        }
+        moves.add(0, killerMove);//add the killer move to the list and shift other moves  to the right
+        if(moves.size()> 6){
+            moves.remove(moves.size() -1);//if the set is too large trim off the last killer move in the list
+            
+        }
+        
+//        killerMoves[ply][0] = move;
+//        for(int numberKillerMoves = 0; numberKillerMoves < killerMoves[ply].length; numberKillerMoves--){
+//            int killer = killerMoves[ply][numberKillerMoves];
+//            for(int i = 0; i < movesCount; i++){
+//                if(moves.get(i) == killerMove){
+//                    
+//                }
+//            }
+//        }
     }
     
 }

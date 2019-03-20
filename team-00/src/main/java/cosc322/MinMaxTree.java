@@ -1,7 +1,7 @@
 package cosc322;
 
 import java.util.ArrayList;
-
+//contains enemy territory heuristic, min max algorithm and alpha beta pruning
 public class MinMaxTree {
     private TreeNodes root;
     private int depth;
@@ -9,6 +9,7 @@ public class MinMaxTree {
     private int movesLeft;
     private MinimumDistance minDist = new MinimumDistance();
     private ArrayList<TreeNodes> frontier = new ArrayList<>();
+    private TreeNodes killer;
 
     //constructor. Tree composed of made nodes in class
     public MinMaxTree(TreeNodes node) {
@@ -30,9 +31,17 @@ public class MinMaxTree {
         }
         return tempDepth;
     }
+
     //Alpha-Beta Pruning method to return significant moves and cut out less valuable ones
     private int Pruning(TreeNodes N, int D, int alpha, int beta, boolean maxPlayer) {
-        if (D == 0 || N.getChildren().size() == 0) {
+        ArrayList<TreeNodes> killerList = new ArrayList<>();
+        killerMove killerSetup = new killerMove();
+        killer = killerSetup.killerPrune(N.getChildren());
+        for(TreeNodes s : N.getChildren()){//populates killerList
+            killerList.add(s);
+        }
+        int amount = N.getChildren().size();
+        if (D == 0 || amount == 0) {
             eval++;
             minDist.calculate(N.GConstraints);
             N.setValue(minDist.ours - minDist.ours);
@@ -45,8 +54,11 @@ public class MinMaxTree {
             for (TreeNodes S : N.getChildren()) {
                 V = Math.max(V, Pruning(S, D - 1, alpha, beta, false));
                 alpha = Math.max(alpha, V);
-                if (beta <= alpha) {
-                    break;
+                if (beta <= alpha) {//condition for killer move insert
+                    N.setChildren(killerSetup.killerInsert(N.getChildren(), killer));//changes the node set to include the killer move first
+                    
+                    break;//beta cuttoff
+                    
                 }
             }
             N.setValue(V);
@@ -58,6 +70,7 @@ public class MinMaxTree {
                 V = Math.min(V, Pruning(S, D - 1, alpha, beta, true));
                 beta = Math.min(beta, V);
                 if (beta <= alpha)
+                    
                     break;
             }
             N.setValue(V);

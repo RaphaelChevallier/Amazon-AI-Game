@@ -36,6 +36,9 @@ public class TreeNodes {
     public ArrayList<TreeNodes> getChildren() {
         return children;
     }
+    public void setChildren(ArrayList<TreeNodes> children){
+        this.children = children;
+    }
 
     public int getValue() {
         return heuristic;
