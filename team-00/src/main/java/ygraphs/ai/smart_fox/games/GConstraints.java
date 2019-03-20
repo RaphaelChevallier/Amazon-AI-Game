@@ -1,4 +1,4 @@
-package cosc322;
+package ygraphs.ai.smart_fox.games;
 
 import java.util.ArrayList;
 
@@ -278,6 +278,14 @@ public class GConstraints {
             return allowedMoves;
         
     }
+
+    public void updateLegalQueenMoves() {
+        Qmove.clear();
+        for(Queen q: friend) {
+            Qmove.addAll(getValidMoves(q));
+        }
+
+    } // end of updateLegalQueenMoves
     public void addArrow (Arrow arrow){
         arrows.add(arrow);
         updateEndTurn();
