@@ -49,7 +49,7 @@ public class Amazon extends GamePlayer{
 
 		//once logged in, the gameClient will have  the names of available game rooms
 		ArrayList<String> rooms = gameClient.getRoomList();
-		this.gameClient.joinRoom(rooms.get(0));//this can be changed for different rooms
+		this.gameClient.joinRoom(rooms.get(5));//this can be changed for different rooms
 	}
 
 
@@ -58,8 +58,8 @@ public class Amazon extends GamePlayer{
 		if(messageType.equals(GameMessage.GAME_ACTION_START)){
 			if(( msgDetails.get("player-white")).equals(this.userName())){
 				System.out.println("Game State: " +  msgDetails.get("player-white"));
-				self = "White Player: " + this.userName();
-				other = "Black Player: " + msgDetails.get("player-black");
+				self = "white Player: " + this.userName();
+				other = "black Player: " + msgDetails.get("player-black");
 				turn++;
 				guiFrame.setTitle("Turn: " + turn + " | Move: " + userName() + " | " + self + " | " + other);
 				ourBoard = new GConstraints(true);
@@ -75,18 +75,16 @@ public class Amazon extends GamePlayer{
 				ourBoard.updateLegalQueenMoves();
 				System.out.println("\nOur Move: [" + translateRow(ourMove.row) + ", " + translateCol(ourMove.col) + "]");
 				System.out.println("Our Arrow Shot: [" + translateRow(ourArrow.row) + ", " + translateCol(ourArrow.col) + "]\n");
-				board.markPosition(translateRow(ourMove.row), translateCol(ourMove.col), translateRow(ourArrow.getRowPos()), translateCol(ourArrow.getColPos()),
-						translateRow(ourMove.previousRow), translateCol(ourMove.previousCol), false);
+				board.markPosition(translateRow(ourMove.row), translateCol(ourMove.col), translateRow(ourArrow.getRowPos()), translateCol(ourArrow.getColPos()), translateRow(ourMove.previousRow), translateCol(ourMove.previousCol), false);
 
-				gameClient.sendMoveMessage(ourMove.combinedMove(translateRow(ourMove.previousRow), translateCol(ourMove.previousCol)),
-						ourMove.combinedMove(translateRow(ourMove.row), translateCol(ourMove.col)),
-						ourArrow.combinedMove(translateRow(ourArrow.getRowPos()), translateCol(ourArrow.getColPos())));
+				gameClient.sendMoveMessage(ourMove.combinedMove(translateRow(ourMove.previousRow), translateCol(ourMove.previousCol)), ourMove.combinedMove(translateRow(ourMove.row), translateCol(ourMove.col)), ourArrow.combinedMove(translateRow(ourArrow.getRowPos()), translateCol(ourArrow.getColPos())));
 				ourBoard.printBoard();
 
 			}
 			else {
-				self = "Black Player: " + this.userName();
-				other = "White Player: " + msgDetails.get("player-white");
+				System.out.println("Game State: " +  msgDetails.get("player-white"));
+				self = "black Player: " + this.userName();
+				other = "white Player: " + msgDetails.get("player-white");
 				ourBoard = new GConstraints(false);
 				MinMax = new MinMaxTree(new TreeNodes(ourBoard));
 
@@ -173,15 +171,6 @@ public class Amazon extends GamePlayer{
 	}
 
 
-	/**
-	 * handle a move made by this player --- send the info to the server.
-	 * @param x queen row index
-	 * @param y queen col index
-	 * @param arow arrow row index
-	 * @param acol arrow col index
-	 * @param qfr queen original row
-	 * @param qfc queen original col
-	 */
 	public void playerMove(int x, int y, int arow, int acol, int qfr, int qfc){
 
 		int[] qf = new int[2];
@@ -293,15 +282,6 @@ public class Amazon extends GamePlayer{
 		}
 
 
-		/**
-		 * repaint the part of the board
-		 * @param qrow queen row index
-		 * @param qcol queen col index
-		 * @param arow arrow row index
-		 * @param acol arrow col index
-		 * @param qfr queen original row
-		 * @param qfc queen original col
-		 */
 		public boolean markPosition(int qrow, int qcol, int arow, int acol,
 									int qfr, int qfc, boolean  opponentMove){
 
@@ -440,7 +420,7 @@ public class Amazon extends GamePlayer{
 	 */
     public static void main(String[] args) {
 		Amazon game01 = new Amazon("Group 6", "01");
+		Amazon game02 = new Amazon("6", "01");
 
-
-    }
+	}
 }
